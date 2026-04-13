@@ -178,7 +178,8 @@ st.markdown("""
 <div class="hero">
     <span class="hero-emoji">🍳</span>
     <h1>냉장고 속 재료로<br>오늘의 레시피를</h1>
-    <p>사진 한 장이면 충분해요 — AI가 재료를 읽고 요리법을 알려드려요</p>
+    <p>사진 한 장이면 충분해요</p>
+    <p style="margin-top:0.3rem;">AI가 재료를 읽고 요리법을 알려드려요</p>
 </div>
 """, unsafe_allow_html=True)
 
