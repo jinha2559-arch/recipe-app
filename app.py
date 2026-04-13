@@ -48,7 +48,7 @@ st.markdown("""
     margin: 0 0 0.5rem; line-height: 1.3;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     text-align: left;
-    width: max-content;
+    white-space: nowrap;
 }
 .hero p { color: rgba(255,255,255,0.88); font-size: 0.95rem; margin: 0; word-break: keep-all; }
 
