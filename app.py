@@ -1,6 +1,7 @@
 import base64
 import io
 import streamlit as st
+import streamlit.components.v1 as components
 from openai import OpenAI
 from PIL import Image, ImageOps
 
@@ -18,10 +19,7 @@ st.markdown("""
 
 * { font-family: 'Noto Sans KR', sans-serif; }
 
-/* 전체 배경 — 따뜻한 크림 */
-[data-testid="stAppViewContainer"] {
-    background-color: #fdf6ee;
-}
+[data-testid="stAppViewContainer"] { background-color: #fdf6ee; }
 [data-testid="stHeader"] { background: transparent; }
 [data-testid="stToolbar"] { display: none; }
 .block-container {
@@ -37,107 +35,23 @@ st.markdown("""
     padding: 3rem 2rem 2.5rem;
     text-align: center;
     margin-bottom: 2rem;
-    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.25);
+    box-shadow: 0 8px 32px rgba(255,107,53,0.25);
 }
-.hero-emoji {
-    font-size: 3.2rem;
-    display: block;
-    margin-bottom: 0.6rem;
-}
+.hero-emoji { font-size: 3.2rem; display: block; margin-bottom: 0.6rem; }
 .hero h1 {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
-    margin: 0 0 0.5rem;
-    line-height: 1.3;
+    font-size: 2rem; font-weight: 900; color: #fff;
+    margin: 0 0 0.5rem; line-height: 1.3;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
-.hero p {
-    color: rgba(255,255,255,0.88);
-    font-size: 0.95rem;
-    margin: 0;
-}
+.hero p { color: rgba(255,255,255,0.88); font-size: 0.95rem; margin: 0; }
 
-/* ── 섹션 제목 ── */
-.section-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #ff6b35;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-}
-
-/* ── 탭 스타일 ── */
-[data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: #fff !important;
-    border-radius: 16px !important;
-    padding: 4px !important;
-    gap: 4px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-}
-[data-testid="stTabs"] [data-baseweb="tab"] {
-    border-radius: 12px !important;
-    font-weight: 700 !important;
-    color: #b07a5a !important;
-    font-size: 0.95rem !important;
-}
-[data-testid="stTabs"] [aria-selected="true"] {
-    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
-    color: #fff !important;
-}
-[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
-    display: none !important;
-}
-[data-testid="stTabs"] [data-baseweb="tab-border"] {
-    display: none !important;
-}
-
-/* ── 카메라 ── */
-[data-testid="stCameraInput"] > div {
-    background: #fff !important;
-    border: 2px dashed #f7c59f !important;
-    border-radius: 20px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-}
-[data-testid="stCameraInput"] label {
-    color: #4a2e1a !important;
-    font-weight: 700 !important;
-}
-
-/* ── 업로더 박스 ── */
-[data-testid="stFileUploader"] > div {
-    background: #fff !important;
-    border: 2px dashed #f7c59f !important;
-    border-radius: 20px !important;
-    padding: 1.8rem !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-    transition: border-color 0.2s, box-shadow 0.2s !important;
-}
-[data-testid="stFileUploader"] > div:hover {
-    border-color: #ff6b35 !important;
-    box-shadow: 0 4px 20px rgba(255,107,53,0.15) !important;
-}
-[data-testid="stFileUploader"] label {
-    color: #4a2e1a !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-}
-[data-testid="stFileDropzoneInstructions"] {
-    color: #b07a5a !important;
-    font-size: 0.85rem !important;
-}
-[data-testid="stBaseButton-secondary"] {
-    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 12px !important;
-    font-weight: 700 !important;
-    transition: all 0.2s !important;
-}
-[data-testid="stBaseButton-secondary"]:hover {
-    transform: translateY(-1px) !important;
-    box-shadow: 0 6px 20px rgba(255,107,53,0.35) !important;
+/* ── 파일 업로더 완전히 숨기기 (기능은 유지) ── */
+[data-testid="stFileUploader"] {
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* ── 이미지 ── */
@@ -148,10 +62,7 @@ st.markdown("""
 }
 
 /* ── 분석중 ── */
-[data-testid="stSpinner"] p {
-    color: #ff6b35 !important;
-    font-weight: 700 !important;
-}
+[data-testid="stSpinner"] p { color: #ff6b35 !important; font-weight: 700 !important; }
 
 /* ── 성공 배너 ── */
 .success-banner {
@@ -174,29 +85,7 @@ st.markdown("""
     margin-top: 0.5rem;
 }
 
-/* 마크다운 텍스트 색상 */
-.result-card .stMarkdown h2 {
-    color: #ff6b35 !important;
-    font-size: 1.1rem !important;
-    font-weight: 900 !important;
-    border-bottom: 2px solid #fde8d8 !important;
-    padding-bottom: 0.4rem !important;
-    margin-top: 1.4rem !important;
-}
-.result-card .stMarkdown h3 {
-    color: #c04a10 !important;
-    font-size: 1rem !important;
-    font-weight: 700 !important;
-}
-.result-card .stMarkdown p,
-.result-card .stMarkdown li {
-    color: #4a2e1a !important;
-    line-height: 1.9 !important;
-    font-size: 0.95rem !important;
-}
-
-/* 전체 마크다운 (result-card 밖) */
-.stMarkdown h2 { color: #ff6b35 !important; }
+.stMarkdown h2 { color: #ff6b35 !important; border-bottom: 2px solid #fde8d8; padding-bottom: 0.4rem; }
 .stMarkdown h3 { color: #c04a10 !important; }
 .stMarkdown p, .stMarkdown li { color: #4a2e1a !important; line-height: 1.9; }
 
@@ -224,70 +113,89 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 탭: 사진 올리기 / 카메라로 찍기 ─────────────────────────────
-탭1, 탭2 = st.tabs(["📁  사진 올리기", "📷  카메라로 찍기"])
+# ── 파일 업로더 2개 (숨겨놓고 JS로 트리거) ───────────────────────
+# 순서 중요: gallery = inputs[0], camera = inputs[1]
+사진     = st.file_uploader("gallery", key="gallery_input", type=["jpg","jpeg","png"], label_visibility="collapsed")
+카메라사진 = st.file_uploader("camera",  key="camera_input",  type=["jpg","jpeg","png"], label_visibility="collapsed")
 
-with 탭1:
-    사진 = st.file_uploader("냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+# ── 버튼 2개 (JS로 숨긴 파일 인풋을 직접 클릭) ───────────────────
+components.html("""
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: transparent; font-family: 'Noto Sans KR', sans-serif; padding: 4px 0 8px; }
+  .row { display: flex; gap: 14px; }
+  .btn {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    padding: 1.5rem 1rem;
+    border: none; border-radius: 22px;
+    font-size: 1rem; font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.12s, box-shadow 0.12s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.96); }
+  .icon { font-size: 2rem; line-height: 1; }
+  .camera {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: #fff;
+    box-shadow: 0 6px 22px rgba(255,107,53,0.38);
+  }
+  .gallery {
+    background: #fff;
+    color: #ff6b35;
+    border: 2.5px solid #ff6b35;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+</style>
 
-with 탭2:
-    # 핸드폰 기본 카메라 앱이 바로 열리도록 capture="environment" 사용
-    카메라사진 = st.file_uploader(
-        "카메라로 찍기",
-        type=["jpg", "jpeg", "png"],
-        key="camera_tab",
-        label_visibility="collapsed",
-        help="핸드폰에서 누르면 카메라가 바로 열려요"
-    )
-    st.markdown("""
-    <style>
-    /* 카메라 탭 업로더를 카메라 버튼처럼 보이게 */
-    div[data-testid="stFileUploader"]:has(input[data-testid="stFileUploaderDropzoneInput"]) label {
-        display: none;
-    }
-    </style>
-    <script>
-    /* 파일 인풋에 capture=environment 주입 → 핸드폰에서 카메라 앱 직접 실행 */
-    function injectCapture() {
-        var inputs = window.parent.document.querySelectorAll('input[type="file"]');
-        inputs.forEach(function(input) {
-            if (!input.hasAttribute('capture')) {
-                input.setAttribute('capture', 'environment');
-                input.setAttribute('accept', 'image/*');
-            }
-        });
-    }
-    setTimeout(injectCapture, 500);
-    setTimeout(injectCapture, 1500);
-    </script>
-    """, unsafe_allow_html=True)
-    st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #ff6b35, #f7931e);
-        border-radius: 18px;
-        padding: 1.6rem;
-        text-align: center;
-        color: white;
-        font-weight: 700;
-        font-size: 1rem;
-        margin-top: -0.5rem;
-        pointer-events: none;
-        box-shadow: 0 4px 20px rgba(255,107,53,0.3);
-    ">
-        📷 위 버튼을 누르면 카메라가 열려요<br>
-        <span style="font-size:0.8rem; opacity:0.85; font-weight:400;">
-        핸드폰에서 사용할 때 카메라 앱이 바로 실행돼요
-        </span>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="row">
+  <button class="btn camera" onclick="openCamera()">
+    <span class="icon">📷</span>
+    카메라로 찍기
+  </button>
+  <button class="btn gallery" onclick="openGallery()">
+    <span class="icon">🖼️</span>
+    사진 올리기
+  </button>
+</div>
 
-# 두 탭 중 올라온 사진 선택 (카메라 우선)
-입력사진 = 카메라사진 if 카메라사진 is not None else 사진
+<script>
+  // 부모 페이지(Streamlit)의 숨겨진 파일 인풋을 찾아 직접 클릭
+  function getInputs() {
+    try { return window.parent.document.querySelectorAll('input[type="file"]'); }
+    catch(e) { return []; }
+  }
+
+  function openCamera() {
+    var inputs = getInputs();
+    // inputs[1] = camera_input (두 번째로 선언된 업로더)
+    var target = inputs.length >= 2 ? inputs[1] : inputs[0];
+    if (!target) return;
+    target.setAttribute('capture', 'environment'); // 핸드폰 후면 카메라 바로 실행
+    target.setAttribute('accept', 'image/*');
+    target.click();
+  }
+
+  function openGallery() {
+    var inputs = getInputs();
+    // inputs[0] = gallery_input (첫 번째로 선언된 업로더)
+    var target = inputs[0];
+    if (!target) return;
+    target.removeAttribute('capture'); // capture 없으면 사진보관함/파일 선택창
+    target.setAttribute('accept', 'image/*');
+    target.click();
+  }
+</script>
+""", height=120)
 
 # ── 사진 올라왔을 때 ──────────────────────────────────────────────
+입력사진 = 카메라사진 if 카메라사진 is not None else 사진
+
 if 입력사진 is not None:
 
-    # EXIF 회전 보정 (핸드폰 세로 사진이 가로로 뜨는 문제 해결)
+    # EXIF 회전 보정
     이미지 = ImageOps.exif_transpose(Image.open(입력사진))
     버퍼 = io.BytesIO()
     이미지.save(버퍼, format="JPEG")
@@ -311,9 +219,7 @@ if 입력사진 is not None:
                     "content": [
                         {
                             "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{사진데이터}"
-                            }
+                            "image_url": {"url": f"data:image/jpeg;base64,{사진데이터}"}
                         },
                         {
                             "type": "text",
@@ -340,14 +246,10 @@ if 입력사진 is not None:
             ]
         )
 
-    # 성공 메시지
     st.markdown("""
-    <div class="success-banner">
-        ✅ &nbsp;분석 완료! 오늘의 레시피를 가져왔어요
-    </div>
+    <div class="success-banner">✅ &nbsp;분석 완료! 오늘의 레시피를 가져왔어요</div>
     """, unsafe_allow_html=True)
 
-    # 결과
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
     st.markdown(대답.choices[0].message.content)
     st.markdown('</div>', unsafe_allow_html=True)
