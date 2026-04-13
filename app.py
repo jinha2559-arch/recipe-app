@@ -1,6 +1,8 @@
 import base64
+import io
 import streamlit as st
 from openai import OpenAI
+from PIL import Image, ImageOps
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
@@ -192,15 +194,21 @@ st.markdown('<div class="section-label">📸 사진 업로드</div>', unsafe_all
 # ── 사진 올라왔을 때 ──────────────────────────────────────────────
 if 사진 is not None:
 
+    # EXIF 회전 보정 (핸드폰 세로 사진이 가로로 뜨는 문제 해결)
+    이미지 = ImageOps.exif_transpose(Image.open(사진))
+    버퍼 = io.BytesIO()
+    이미지.save(버퍼, format="JPEG")
+    버퍼.seek(0)
+
     # 이미지 미리보기
     st.markdown("<br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 4, 1])
     with col2:
-        st.image(사진, use_container_width=True)
+        st.image(이미지, use_container_width=True)
 
     # AI 분석
     with st.spinner("🤔  AI가 재료를 열심히 분석하고 있어요..."):
-        사진데이터 = base64.b64encode(사진.read()).decode("utf-8")
+        사진데이터 = base64.b64encode(버퍼.getvalue()).decode("utf-8")
 
         대답 = client.chat.completions.create(
             model="gpt-4o-mini",
