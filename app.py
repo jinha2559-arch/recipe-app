@@ -68,6 +68,43 @@ st.markdown("""
     margin-bottom: 0.6rem;
 }
 
+/* ── 탭 스타일 ── */
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    background: #fff !important;
+    border-radius: 16px !important;
+    padding: 4px !important;
+    gap: 4px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab"] {
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    color: #b07a5a !important;
+    font-size: 0.95rem !important;
+}
+[data-testid="stTabs"] [aria-selected="true"] {
+    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
+    color: #fff !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+    display: none !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab-border"] {
+    display: none !important;
+}
+
+/* ── 카메라 ── */
+[data-testid="stCameraInput"] > div {
+    background: #fff !important;
+    border: 2px dashed #f7c59f !important;
+    border-radius: 20px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+}
+[data-testid="stCameraInput"] label {
+    color: #4a2e1a !important;
+    font-weight: 700 !important;
+}
+
 /* ── 업로더 박스 ── */
 [data-testid="stFileUploader"] > div {
     background: #fff !important;
@@ -187,15 +224,23 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 파일 업로더 ───────────────────────────────────────────────────
-st.markdown('<div class="section-label">📸 사진 업로드</div>', unsafe_allow_html=True)
-사진 = st.file_uploader("냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+# ── 탭: 사진 올리기 / 카메라로 찍기 ─────────────────────────────
+탭1, 탭2 = st.tabs(["📁  사진 올리기", "📷  카메라로 찍기"])
+
+with 탭1:
+    사진 = st.file_uploader("냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+
+with 탭2:
+    카메라사진 = st.camera_input("카메라로 냉장고를 찍어주세요", label_visibility="collapsed")
+
+# 두 탭 중 올라온 사진 선택 (카메라 우선)
+입력사진 = 카메라사진 if 카메라사진 is not None else 사진
 
 # ── 사진 올라왔을 때 ──────────────────────────────────────────────
-if 사진 is not None:
+if 입력사진 is not None:
 
     # EXIF 회전 보정 (핸드폰 세로 사진이 가로로 뜨는 문제 해결)
-    이미지 = ImageOps.exif_transpose(Image.open(사진))
+    이미지 = ImageOps.exif_transpose(Image.open(입력사진))
     버퍼 = io.BytesIO()
     이미지.save(버퍼, format="JPEG")
     버퍼.seek(0)
@@ -204,7 +249,7 @@ if 사진 is not None:
     st.markdown("<br>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 4, 1])
     with col2:
-        st.image(이미지, use_container_width=True)
+        st.image(이미지, caption="분석할 사진", use_container_width=True)
 
     # AI 분석
     with st.spinner("🤔  AI가 재료를 열심히 분석하고 있어요..."):
