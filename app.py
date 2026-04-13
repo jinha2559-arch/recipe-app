@@ -10,241 +10,196 @@ st.set_page_config(
     layout="centered"
 )
 
-# ── 전체 디자인 CSS ──────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
-/* 전체 배경 */
+* { font-family: 'Noto Sans KR', sans-serif; }
+
+/* 전체 배경 — 따뜻한 크림 */
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    min-height: 100vh;
-    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fdf6ee;
 }
 [data-testid="stHeader"] { background: transparent; }
 [data-testid="stToolbar"] { display: none; }
-.block-container { padding-top: 2rem; padding-bottom: 4rem; }
-
-/* 히어로 헤더 */
-.hero {
-    text-align: center;
-    padding: 3rem 1rem 2rem;
+.block-container {
+    padding-top: 0 !important;
+    padding-bottom: 4rem;
+    max-width: 720px;
 }
-.hero-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #c9b8ff;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 6px 18px;
-    border-radius: 50px;
-    margin-bottom: 1.2rem;
+
+/* ── 히어로 배너 ── */
+.hero {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    border-radius: 0 0 36px 36px;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.25);
+}
+.hero-emoji {
+    font-size: 3.2rem;
+    display: block;
+    margin-bottom: 0.6rem;
 }
 .hero h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 900;
-    background: linear-gradient(90deg, #fff 0%, #c9b8ff 50%, #ff9a9e 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-    margin: 0 0 1rem;
+    color: #fff;
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 .hero p {
-    color: rgba(255,255,255,0.6);
-    font-size: 1.1rem;
+    color: rgba(255,255,255,0.88);
+    font-size: 0.95rem;
     margin: 0;
 }
 
-/* 구분선 */
-.divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201,184,255,0.4), transparent);
-    margin: 2rem 0;
+/* ── 섹션 제목 ── */
+.section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #ff6b35;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
 }
 
-/* 업로드 카드 */
-.upload-card {
-    background: rgba(255,255,255,0.05);
-    border: 1.5px dashed rgba(201,184,255,0.4);
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-.upload-card:hover {
-    border-color: rgba(201,184,255,0.8);
-    background: rgba(255,255,255,0.08);
-}
-.upload-label {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    margin-top: 0.8rem;
-    display: block;
-}
-
-/* 파일 업로더 스타일 오버라이드 */
-[data-testid="stFileUploader"] {
-    background: transparent !important;
-}
+/* ── 업로더 박스 ── */
 [data-testid="stFileUploader"] > div {
-    background: rgba(255,255,255,0.05) !important;
-    border: 1.5px dashed rgba(201,184,255,0.4) !important;
+    background: #fff !important;
+    border: 2px dashed #f7c59f !important;
     border-radius: 20px !important;
-    padding: 1.5rem !important;
+    padding: 1.8rem !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+[data-testid="stFileUploader"] > div:hover {
+    border-color: #ff6b35 !important;
+    box-shadow: 0 4px 20px rgba(255,107,53,0.15) !important;
 }
 [data-testid="stFileUploader"] label {
-    color: rgba(255,255,255,0.8) !important;
-    font-size: 1rem !important;
+    color: #4a2e1a !important;
     font-weight: 700 !important;
+    font-size: 1rem !important;
 }
 [data-testid="stFileDropzoneInstructions"] {
-    color: rgba(255,255,255,0.4) !important;
+    color: #b07a5a !important;
+    font-size: 0.85rem !important;
 }
 [data-testid="stBaseButton-secondary"] {
-    background: linear-gradient(135deg, #7c3aed, #c026d3) !important;
-    color: white !important;
+    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
+    color: #fff !important;
     border: none !important;
     border-radius: 12px !important;
     font-weight: 700 !important;
-    padding: 0.5rem 1.5rem !important;
     transition: all 0.2s !important;
 }
 [data-testid="stBaseButton-secondary"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(124,58,237,0.5) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(255,107,53,0.35) !important;
 }
 
-/* 이미지 카드 */
-.image-wrapper {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 1.2rem;
-    text-align: center;
-    margin: 1.5rem 0;
-}
-.image-caption {
-    color: rgba(255,255,255,0.4);
-    font-size: 0.8rem;
-    margin-top: 0.8rem;
+/* ── 이미지 ── */
+[data-testid="stImage"] img {
+    border-radius: 20px !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important;
+    width: 100% !important;
 }
 
-/* 분석중 배너 */
-.analyzing-box {
-    background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(192,38,211,0.2));
-    border: 1px solid rgba(201,184,255,0.3);
-    border-radius: 16px;
-    padding: 1.5rem;
-    text-align: center;
-    color: #c9b8ff;
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin: 1rem 0;
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+/* ── 분석중 ── */
+[data-testid="stSpinner"] p {
+    color: #ff6b35 !important;
+    font-weight: 700 !important;
 }
 
-/* 성공 배너 */
+/* ── 성공 배너 ── */
 .success-banner {
-    background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(5,150,105,0.2));
-    border: 1px solid rgba(16,185,129,0.4);
-    border-radius: 16px;
-    padding: 1rem 1.5rem;
-    color: #6ee7b7;
+    background: #fff7f0;
+    border-left: 4px solid #ff6b35;
+    border-radius: 0 12px 12px 0;
+    padding: 0.9rem 1.2rem;
+    color: #c04a10;
     font-weight: 700;
-    font-size: 1rem;
-    margin: 1rem 0;
+    font-size: 0.95rem;
+    margin: 1.5rem 0 1rem;
+}
+
+/* ── 레시피 결과 카드 ── */
+.result-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    margin-top: 0.5rem;
+}
+
+/* 마크다운 텍스트 색상 */
+.result-card .stMarkdown h2 {
+    color: #ff6b35 !important;
+    font-size: 1.1rem !important;
+    font-weight: 900 !important;
+    border-bottom: 2px solid #fde8d8 !important;
+    padding-bottom: 0.4rem !important;
+    margin-top: 1.4rem !important;
+}
+.result-card .stMarkdown h3 {
+    color: #c04a10 !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+}
+.result-card .stMarkdown p,
+.result-card .stMarkdown li {
+    color: #4a2e1a !important;
+    line-height: 1.9 !important;
+    font-size: 0.95rem !important;
+}
+
+/* 전체 마크다운 (result-card 밖) */
+.stMarkdown h2 { color: #ff6b35 !important; }
+.stMarkdown h3 { color: #c04a10 !important; }
+.stMarkdown p, .stMarkdown li { color: #4a2e1a !important; line-height: 1.9; }
+
+/* ── 하단 팁 ── */
+.tip-box {
+    background: #fff3e8;
+    border-radius: 16px;
+    padding: 1rem 1.4rem;
+    margin-top: 2rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-}
-
-/* 레시피 결과 카드 */
-.result-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px;
-    padding: 2rem 2.5rem;
-    margin-top: 1.5rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-.result-card h2, .result-card h3 {
-    color: #c9b8ff !important;
-}
-.result-card p, .result-card li {
-    color: rgba(255,255,255,0.85) !important;
-    line-height: 1.8;
-}
-.result-card strong {
-    color: #ff9a9e !important;
-}
-
-/* 마크다운 전체 텍스트 색상 */
-.stMarkdown, .stMarkdown p, .stMarkdown li, .stMarkdown h1,
-.stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
-    color: rgba(255,255,255,0.85) !important;
-}
-.stMarkdown h2 { color: #c9b8ff !important; border-bottom: 1px solid rgba(201,184,255,0.2); padding-bottom: 0.4rem; }
-.stMarkdown h3 { color: #ff9a9e !important; }
-
-/* 이미지 둥근 모서리 */
-[data-testid="stImage"] img {
-    border-radius: 16px !important;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4) !important;
-}
-
-/* 스피너 */
-[data-testid="stSpinner"] {
-    color: #c9b8ff !important;
-}
-[data-testid="stSpinner"] > div {
-    border-top-color: #c9b8ff !important;
-}
-
-/* 하단 안내 텍스트 */
-.tip-text {
-    text-align: center;
-    color: rgba(255,255,255,0.3);
-    font-size: 0.8rem;
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    gap: 0.7rem;
+    color: #9a5c38;
+    font-size: 0.85rem;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ── 히어로 헤더 ───────────────────────────────────────────────────
+# ── 히어로 배너 ────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero">
-    <div class="hero-badge">✨ AI 레시피 추천</div>
-    <h1>냉장고 속 재료로<br>오늘의 요리를</h1>
-    <p>사진 한 장이면 충분해요 — AI가 재료를 읽고 레시피를 알려드려요</p>
+    <span class="hero-emoji">🍳</span>
+    <h1>냉장고 속 재료로<br>오늘의 레시피를</h1>
+    <p>사진 한 장이면 충분해요 — AI가 재료를 읽고 요리법을 알려드려요</p>
 </div>
-<div class="divider"></div>
 """, unsafe_allow_html=True)
 
 # ── 파일 업로더 ───────────────────────────────────────────────────
-사진 = st.file_uploader("📸 냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"])
+st.markdown('<div class="section-label">📸 사진 업로드</div>', unsafe_allow_html=True)
+사진 = st.file_uploader("냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
 
 # ── 사진 올라왔을 때 ──────────────────────────────────────────────
 if 사진 is not None:
 
     # 이미지 미리보기
-    st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 3, 1])
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 4, 1])
     with col2:
-        st.image(사진, caption="업로드한 사진", use_container_width=True)
+        st.image(사진, use_container_width=True)
 
     # AI 분석
-    with st.spinner("🤔  AI가 재료를 열심히 살펴보는 중이에요..."):
+    with st.spinner("🤔  AI가 재료를 열심히 분석하고 있어요..."):
         사진데이터 = base64.b64encode(사진.read()).decode("utf-8")
 
         대답 = client.chat.completions.create(
@@ -291,14 +246,14 @@ if 사진 is not None:
     </div>
     """, unsafe_allow_html=True)
 
-    # 결과 카드
+    # 결과
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
     st.markdown(대답.choices[0].message.content)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ── 하단 안내 ─────────────────────────────────────────────────────
+# ── 하단 팁 ───────────────────────────────────────────────────────
 st.markdown("""
-<div class="tip-text">
-    냉장고 사진이 밝고 선명할수록 더 정확하게 재료를 읽을 수 있어요 🔍
+<div class="tip-box">
+    💡 &nbsp;냉장고 문을 열고 내부가 밝게 보이도록 찍으면 더 정확하게 인식해요!
 </div>
 """, unsafe_allow_html=True)
