@@ -2,7 +2,7 @@ import base64
 import streamlit as st
 from openai import OpenAI
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.set_page_config(page_title="냉장고 레시피 추천", page_icon="🍳")
 st.title("🍳 냉장고 레시피 추천")
