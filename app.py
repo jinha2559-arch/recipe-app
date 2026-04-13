@@ -119,25 +119,29 @@ st.markdown("""
     color: #b07a5a;
 }
 
-/* ── 탭 스타일 ── */
+/* ── 탭 스타일 (밑줄 방식) ── */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: #fff !important;
-    border-radius: 16px !important;
-    padding: 4px !important;
-    gap: 4px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+    background: transparent !important;
+    border-bottom: 2px solid #f0e6dc !important;
+    gap: 0 !important;
+    padding: 0 !important;
 }
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    border-radius: 12px !important;
+    background: transparent !important;
+    border-radius: 0 !important;
     font-weight: 700 !important;
     color: #b07a5a !important;
-    font-size: 0.9rem !important;
+    font-size: 0.95rem !important;
+    padding: 0.7rem 1.2rem !important;
+    border-bottom: 3px solid transparent !important;
+    margin-bottom: -2px !important;
 }
 [data-testid="stTabs"] [aria-selected="true"] {
-    background: linear-gradient(135deg, #ff6b35, #f7931e) !important;
-    color: #fff !important;
+    background: transparent !important;
+    color: #ff6b35 !important;
+    border-bottom: 3px solid #ff6b35 !important;
 }
-[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+[data-testid="stTabs"] [data-baseweb="tab-highlight"] { display: none !important; }
 [data-testid="stTabs"] [data-baseweb="tab-border"] { display: none !important; }
 
 .stMarkdown h2 { color: #ff6b35 !important; border-bottom: 2px solid #fde8d8; padding-bottom: 0.4rem; }
@@ -178,17 +182,17 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 탭 3개 ────────────────────────────────────────────────────────
+# ── 숨겨진 파일 업로더 2개 (탭 밖에 위치해야 JS가 안정적으로 찾음) ──
+사진     = st.file_uploader("gallery", key="gallery_input", type=["jpg","jpeg","png"], label_visibility="collapsed")
+카메라사진 = st.file_uploader("camera",  key="camera_input",  type=["jpg","jpeg","png"], label_visibility="collapsed")
+
+# ── 탭 2개 ────────────────────────────────────────────────────────
 탭_분석, 탭_저장 = st.tabs(["🍳  레시피 추천", "📋  저장된 레시피"])
 
 # ══════════════════════════════════════════════════════════════════
 # 탭 1: 레시피 추천
 # ══════════════════════════════════════════════════════════════════
 with 탭_분석:
-
-    # 숨겨진 파일 업로더 2개
-    사진     = st.file_uploader("gallery", key="gallery_input", type=["jpg","jpeg","png"], label_visibility="collapsed")
-    카메라사진 = st.file_uploader("camera",  key="camera_input",  type=["jpg","jpeg","png"], label_visibility="collapsed")
 
     # 버튼 2개
     components.html("""
@@ -313,11 +317,14 @@ with 탭_분석:
 
         # 저장 버튼
         if st.button("💾  이 레시피 저장하기", type="primary"):
-            supabase.table("recipes").insert({
-                "title": 제목,
-                "content": 레시피내용
-            }).execute()
-            st.markdown('<div class="save-banner">✅ &nbsp;저장 완료! 저장된 레시피 탭에서 확인하세요</div>', unsafe_allow_html=True)
+            try:
+                supabase.table("recipes").insert({
+                    "title": 제목,
+                    "content": 레시피내용
+                }).execute()
+                st.markdown('<div class="save-banner">✅ &nbsp;저장 완료! 저장된 레시피 탭에서 확인하세요</div>', unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"저장 중 오류가 발생했어요: {e}")
 
     st.markdown('<div class="tip-box">💡 &nbsp;냉장고 문을 열고 내부가 밝게 보이도록 찍으면 더 정확하게 인식해요!</div>', unsafe_allow_html=True)
 
@@ -327,8 +334,12 @@ with 탭_분석:
 # ══════════════════════════════════════════════════════════════════
 with 탭_저장:
 
-    결과 = supabase.table("recipes").select("*").order("created_at", desc=True).execute()
-    레시피목록 = 결과.data
+    try:
+        결과 = supabase.table("recipes").select("*").order("created_at", desc=True).execute()
+        레시피목록 = 결과.data
+    except Exception as e:
+        st.error(f"저장된 레시피를 불러오는 중 오류가 발생했어요: {e}")
+        레시피목록 = []
 
     if not 레시피목록:
         st.markdown("""
