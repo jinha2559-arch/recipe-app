@@ -182,9 +182,67 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 숨겨진 파일 업로더 2개 (탭 밖에 위치해야 JS가 안정적으로 찾음) ──
+# ── 숨겨진 파일 업로더 2개 ──────────────────────────────────────
 사진     = st.file_uploader("gallery", key="gallery_input", type=["jpg","jpeg","png"], label_visibility="collapsed")
 카메라사진 = st.file_uploader("camera",  key="camera_input",  type=["jpg","jpeg","png"], label_visibility="collapsed")
+
+# ── 카메라 / 사진 버튼 (탭 없이 바로 등장) ───────────────────────
+components.html("""
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: transparent; font-family: 'Noto Sans KR', sans-serif; padding: 4px 0 8px; }
+  .row { display: flex; gap: 14px; }
+  .btn {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    padding: 1.5rem 1rem; border: none; border-radius: 22px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.12s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: scale(0.96); }
+  .icon { font-size: 2rem; line-height: 1; }
+  .camera {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: #fff; box-shadow: 0 6px 22px rgba(255,107,53,0.38);
+  }
+  .gallery {
+    background: #fff; color: #ff6b35;
+    border: 2.5px solid #ff6b35; box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+</style>
+<div class="row">
+  <button class="btn camera" onclick="openCamera()">
+    <span class="icon">📷</span>카메라로 찍기
+  </button>
+  <button class="btn gallery" onclick="openGallery()">
+    <span class="icon">🖼️</span>사진 올리기
+  </button>
+</div>
+<script>
+  function getInputs() {
+    try { return window.parent.document.querySelectorAll('input[type="file"]'); }
+    catch(e) { return []; }
+  }
+  function openCamera() {
+    var inputs = getInputs();
+    var t = inputs.length >= 2 ? inputs[1] : inputs[0];
+    if (!t) return;
+    t.setAttribute('capture', 'environment');
+    t.setAttribute('accept', 'image/*');
+    t.click();
+  }
+  function openGallery() {
+    var inputs = getInputs();
+    var t = inputs[0];
+    if (!t) return;
+    t.removeAttribute('capture');
+    t.setAttribute('accept', 'image/*');
+    t.click();
+  }
+</script>
+""", height=120)
+
+st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
 
 # ── 탭 2개 ────────────────────────────────────────────────────────
 탭_분석, 탭_저장 = st.tabs(["🍳  레시피 추천", "📋  저장된 레시피"])
@@ -194,64 +252,16 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════
 with 탭_분석:
 
-    # 버튼 2개
-    components.html("""
-    <style>
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      body { background: transparent; font-family: 'Noto Sans KR', sans-serif; padding: 4px 0 8px; }
-      .row { display: flex; gap: 14px; }
-      .btn {
-        flex: 1; display: flex; flex-direction: column;
-        align-items: center; justify-content: center; gap: 8px;
-        padding: 1.5rem 1rem; border: none; border-radius: 22px;
-        font-size: 1rem; font-weight: 700; cursor: pointer;
-        transition: transform 0.12s; -webkit-tap-highlight-color: transparent;
-      }
-      .btn:active { transform: scale(0.96); }
-      .icon { font-size: 2rem; line-height: 1; }
-      .camera {
-        background: linear-gradient(135deg, #ff6b35, #f7931e);
-        color: #fff; box-shadow: 0 6px 22px rgba(255,107,53,0.38);
-      }
-      .gallery {
-        background: #fff; color: #ff6b35;
-        border: 2.5px solid #ff6b35; box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      }
-    </style>
-    <div class="row">
-      <button class="btn camera" onclick="openCamera()">
-        <span class="icon">📷</span>카메라로 찍기
-      </button>
-      <button class="btn gallery" onclick="openGallery()">
-        <span class="icon">🖼️</span>사진 올리기
-      </button>
-    </div>
-    <script>
-      function getInputs() {
-        try { return window.parent.document.querySelectorAll('input[type="file"]'); }
-        catch(e) { return []; }
-      }
-      function openCamera() {
-        var inputs = getInputs();
-        var t = inputs.length >= 2 ? inputs[1] : inputs[0];
-        if (!t) return;
-        t.setAttribute('capture', 'environment');
-        t.setAttribute('accept', 'image/*');
-        t.click();
-      }
-      function openGallery() {
-        var inputs = getInputs();
-        var t = inputs[0];
-        if (!t) return;
-        t.removeAttribute('capture');
-        t.setAttribute('accept', 'image/*');
-        t.click();
-      }
-    </script>
-    """, height=120)
-
-    # 사진 처리
     입력사진 = 카메라사진 if 카메라사진 is not None else 사진
+
+    if 입력사진 is None:
+        st.markdown("""
+        <div style="text-align:center; padding: 2.5rem 1rem; color: #b07a5a;">
+            <div style="font-size:2.5rem; margin-bottom:0.8rem;">☝️</div>
+            <div style="font-weight:700; font-size:1rem; color:#4a2e1a;">위 버튼으로 사진을 올려주세요</div>
+            <div style="font-size:0.85rem; margin-top:0.4rem;">사진을 올리면 AI가 재료를 분석하고 레시피를 추천해드려요</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     if 입력사진 is not None:
 
