@@ -231,7 +231,55 @@ with 탭1:
     사진 = st.file_uploader("냉장고 사진을 올려주세요", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
 
 with 탭2:
-    카메라사진 = st.camera_input("카메라로 냉장고를 찍어주세요", label_visibility="collapsed")
+    # 핸드폰 기본 카메라 앱이 바로 열리도록 capture="environment" 사용
+    카메라사진 = st.file_uploader(
+        "카메라로 찍기",
+        type=["jpg", "jpeg", "png"],
+        key="camera_tab",
+        label_visibility="collapsed",
+        help="핸드폰에서 누르면 카메라가 바로 열려요"
+    )
+    st.markdown("""
+    <style>
+    /* 카메라 탭 업로더를 카메라 버튼처럼 보이게 */
+    div[data-testid="stFileUploader"]:has(input[data-testid="stFileUploaderDropzoneInput"]) label {
+        display: none;
+    }
+    </style>
+    <script>
+    /* 파일 인풋에 capture=environment 주입 → 핸드폰에서 카메라 앱 직접 실행 */
+    function injectCapture() {
+        var inputs = window.parent.document.querySelectorAll('input[type="file"]');
+        inputs.forEach(function(input) {
+            if (!input.hasAttribute('capture')) {
+                input.setAttribute('capture', 'environment');
+                input.setAttribute('accept', 'image/*');
+            }
+        });
+    }
+    setTimeout(injectCapture, 500);
+    setTimeout(injectCapture, 1500);
+    </script>
+    """, unsafe_allow_html=True)
+    st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #ff6b35, #f7931e);
+        border-radius: 18px;
+        padding: 1.6rem;
+        text-align: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: -0.5rem;
+        pointer-events: none;
+        box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+    ">
+        📷 위 버튼을 누르면 카메라가 열려요<br>
+        <span style="font-size:0.8rem; opacity:0.85; font-weight:400;">
+        핸드폰에서 사용할 때 카메라 앱이 바로 실행돼요
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
 
 # 두 탭 중 올라온 사진 선택 (카메라 우선)
 입력사진 = 카메라사진 if 카메라사진 is not None else 사진
