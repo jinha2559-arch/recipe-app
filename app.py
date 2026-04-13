@@ -44,10 +44,11 @@ st.markdown("""
 }
 .hero-emoji { font-size: 3.2rem; display: block; margin-bottom: 0.6rem; }
 .hero h1 {
-    font-size: 2rem; font-weight: 900; color: #fff;
-    margin: 0 0 0.5rem; line-height: 1.3;
+    font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 900; color: #fff;
+    margin: 0 0 0.5rem; line-height: 1.4;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
     text-align: left;
+    word-break: keep-all;
 }
 .hero p { color: rgba(255,255,255,0.88); font-size: 0.95rem; margin: 0; word-break: keep-all; }
 
