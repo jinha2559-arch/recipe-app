@@ -38,17 +38,12 @@ st.markdown("""
     text-align: center;
     margin-bottom: 2rem;
     box-shadow: 0 8px 32px rgba(255,107,53,0.25);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 .hero-emoji { font-size: 3.2rem; display: block; margin-bottom: 0.6rem; }
 .hero h1 {
     font-size: 2rem; font-weight: 900; color: #fff;
     margin: 0 0 0.5rem; line-height: 1.3;
     text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    text-align: center;
-    white-space: nowrap;
 }
 .hero p { color: rgba(255,255,255,0.88); font-size: 0.95rem; margin: 0; word-break: keep-all; }
 
